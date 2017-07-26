@@ -9,6 +9,7 @@ struct timeval time_for_srand;
 struct timespec begin, end;
 double elapsed;
 
+void initialize(int n);
 void CreateFullMatrix(double **matrix, int n);
 void FillMatrix(double **matrix, int n);
 void TransposeMatrix(double **matrix, int n);
@@ -28,7 +29,19 @@ double GetTime();
 
 main(int argc, char *argv[])
 {
-    int n = 800;
+    //int n = 800;
+    
+
+    for (int i = 200; i <= 2000; i += 200)
+    { // call through this loop for each test case
+        //std::cout << i << "\n";
+        srand((time_for_srand.tv_sec * 1000) + (time_for_srand.tv_usec / 1000));
+        initialize(i);
+    }
+    
+}
+
+void initialize(int n){
     double **matrix_a = new double *[n];
     double **matrix_b = new double *[n];
     double **matrix_c = new double *[n];
@@ -36,11 +49,6 @@ main(int argc, char *argv[])
     CreateFullMatrix(matrix_b, n);
     CreateFullMatrix(matrix_c, n);
 
-    for (int i = 200; i <= 2000; i += 200)
-    { // call through this loop for each test case
-        //std::cout << i << "\n";
-        srand((time_for_srand.tv_sec * 1000) + (time_for_srand.tv_usec / 1000));
-    }
     FillMatrix(matrix_a, n);
     FillMatrix(matrix_b, n);
     //PrintMatrix(matrix_a,n);
@@ -48,8 +56,6 @@ main(int argc, char *argv[])
     //PrintMatrix(matrix_b,n);
     //std::cout << "\n";
     
-    
-
     SerailMultiply(matrix_a, matrix_b, matrix_c, n);
     ParallelMultiply(matrix_a, matrix_b, matrix_c, n);
     //PrintMatrix(matrix_c,n);
@@ -64,6 +70,7 @@ main(int argc, char *argv[])
     FreeMatrix(matrix_a, n);
     FreeMatrix(matrix_b, n);
     FreeMatrix(matrix_c, n);
+    std::cout << "\n";
 }
 
 void CreateFullMatrix(double **matrix, int n)
