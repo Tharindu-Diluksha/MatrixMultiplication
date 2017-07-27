@@ -40,7 +40,7 @@ main(int argc, char *argv[])
     double finalized_paralel_improved_time = 0.0;
     int runing_number_of_samples = intial_number_of_samples;
 
-    for (int number_of_raws = 200; number_of_raws <= 200; number_of_raws += 200)
+    for (int number_of_raws = 200; number_of_raws <= 600; number_of_raws += 200)
     { // call through this loop for each test case
         //std::cout << i << "\n";
         int runing_number_of_samples = intial_number_of_samples;
@@ -61,7 +61,6 @@ void run_program(int number_of_raws, double *finalized_serial_time, double *fina
     double *paralel_improved_time_array = new double[*number_of_samples]; //time array of parallel improved multiplication
     srand((time_for_srand.tv_sec * 1000) + (time_for_srand.tv_usec / 1000));
     int sample_size = *number_of_samples;
-    printf("run program sample_size %d = %d\n", sample_size, *number_of_samples);
     for (int sample_num = 0; sample_num < *number_of_samples; sample_num++)
     { // run program for given number of samples
         double serial_time = 0.0;
@@ -78,17 +77,20 @@ void run_program(int number_of_raws, double *finalized_serial_time, double *fina
         int serial_sample = GetSampleSize(serial_time_array, sample_size);
         int parallel_sample = GetSampleSize(parallel_time_array, sample_size);
         int parallel_improved_sample = GetSampleSize(paralel_improved_time_array, sample_size);
-        std::cout << serial_sample << "\n";
-        std::cout << parallel_sample << "\n";
-        std::cout << parallel_improved_sample << "\n";
+        //std::cout << serial_sample << "\n";
+        //std::cout << parallel_sample << "\n";
+        //std::cout << parallel_improved_sample << "\n";
         int max = serial_sample;
         if (max < parallel_sample)
         {
             max = parallel_sample;
         }
-        else if (max < parallel_improved_sample)
+        if (max < parallel_improved_sample)
         {
             max = parallel_improved_sample;
+        }
+        if(max>100){
+            max=100;
         }
         *number_of_samples = max;
     }
@@ -143,12 +145,6 @@ double GetMean(double *array, int n)
     {
         total = total + array[i];
     }
-    for (int i = 0; i < n; i++)
-    {
-        std::cout << "Get mean "<< array[i] << "\n";
-    }
-    std::cout << "Get mean === mean"<<total / (n * 1.0)<< "\n";
-    std::cout <<  "\n";
     return total / (n * 1.0);
 }
 
@@ -165,11 +161,6 @@ double GetSD(double *array, double mean, int n)
 int GetSampleSize(double *array, int n)
 {
     double mean = GetMean(array, n);
-    for (int i = 0; i < n; i++)
-    {
-        std::cout << "Sample count "<< array[i] << "\n";
-    }
-    std::cout <<  "\n";
     return pow(((100 * 1.960 * GetSD(array, mean, n)) / (5 * mean)), 2) + 1;
 }
 
