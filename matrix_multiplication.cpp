@@ -42,7 +42,6 @@ main(int argc, char *argv[])
 
     for (int number_of_raws = 200; number_of_raws <= 600; number_of_raws += 200)
     { // call through this loop for each test case
-        //std::cout << i << "\n";
         int runing_number_of_samples = intial_number_of_samples;
         run_program(number_of_raws, &finalized_serial_time, &finalized_parallel_time, &finalized_paralel_improved_time, &runing_number_of_samples, true);
         printf("No of samples runing for %d raws matrix = %d\n", number_of_raws, runing_number_of_samples);
@@ -77,9 +76,6 @@ void run_program(int number_of_raws, double *finalized_serial_time, double *fina
         int serial_sample = GetSampleSize(serial_time_array, sample_size);
         int parallel_sample = GetSampleSize(parallel_time_array, sample_size);
         int parallel_improved_sample = GetSampleSize(paralel_improved_time_array, sample_size);
-        //std::cout << serial_sample << "\n";
-        //std::cout << parallel_sample << "\n";
-        //std::cout << parallel_improved_sample << "\n";
         int max = serial_sample;
         if (max < parallel_sample)
         {
@@ -117,21 +113,12 @@ void initiate_run(int n, double *serial_time, double *parallel_time, double *par
 
     FillMatrix(matrix_a, n);
     FillMatrix(matrix_b, n);
-    //PrintMatrix(matrix_a,n);
-    //std::cout << "\n";
-    //PrintMatrix(matrix_b,n);
-    //std::cout << "\n";
 
-    *serial_time = SerailMultiply(matrix_a, matrix_b, matrix_c, n);
-    *parallel_time = ParallelMultiply(matrix_a, matrix_b, matrix_c, n);
-    //PrintMatrix(matrix_c,n);
-    //std::cout << "\n";
-    TransposeMatrix(matrix_b, n);
-    //PrintMatrix(matrix_b,n);
-    //std::cout << "\n";
-    *paralel_improved_time = ParallelImprovedMultiply(matrix_a, matrix_b, matrix_c, n);
-    //PrintMatrix(matrix_c,n);
-    //std::cout << "\n";
+    *serial_time = SerailMultiply(matrix_a, matrix_b, matrix_c, n);// call serail multiplication
+    *parallel_time = ParallelMultiply(matrix_a, matrix_b, matrix_c, n);// call parallel multiplication
+
+    TransposeMatrix(matrix_b, n);// Taking transpose of B and put it in B.
+    *paralel_improved_time = ParallelImprovedMultiply(matrix_a, matrix_b, matrix_c, n);// call improved parallel multiplication
 
     FreeMatrix(matrix_a, n);
     FreeMatrix(matrix_b, n);
@@ -139,7 +126,7 @@ void initiate_run(int n, double *serial_time, double *parallel_time, double *par
 }
 
 double GetMean(double *array, int n)
-{
+{ //Calculate mean
     double total = 0.0;
     for (int i = 0; i < n; i++)
     {
@@ -149,7 +136,7 @@ double GetMean(double *array, int n)
 }
 
 double GetSD(double *array, double mean, int n)
-{
+{ //Calculate standard deviation
     double standardDeviation = 0.0;
     for (int i = 0; i < n; ++i)
     {
@@ -159,7 +146,7 @@ double GetSD(double *array, double mean, int n)
 }
 
 int GetSampleSize(double *array, int n)
-{
+{ // Return the sufficient sample size
     double mean = GetMean(array, n);
     return pow(((100 * 1.960 * GetSD(array, mean, n)) / (5 * mean)), 2) + 1;
 }
