@@ -40,7 +40,7 @@ main(int argc, char *argv[])
     double finalized_paralel_improved_time = 0.0;
     int runing_number_of_samples = intial_number_of_samples;
 
-    for (int number_of_raws = 200; number_of_raws <= 600; number_of_raws += 200)
+    for (int number_of_raws = 200; number_of_raws <= 2000; number_of_raws += 200)
     { // call through this loop for each test case
         int runing_number_of_samples = intial_number_of_samples;
         run_program(number_of_raws, &finalized_serial_time, &finalized_parallel_time, &finalized_paralel_improved_time, &runing_number_of_samples, true);
