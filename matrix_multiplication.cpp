@@ -4,44 +4,65 @@
 #include <time.h>
 #include <chrono>
 #include <omp.h>
+#include <cmath>
 
 struct timeval time_for_srand;
 struct timespec begin, end;
 double elapsed;
 
-void initialize(int n);
+void initialize_run(int n, double *serial_time, double *parallel_time, double *paralel_improved_time);
 void CreateFullMatrix(double **matrix, int n);
 void FillMatrix(double **matrix, int n);
 void TransposeMatrix(double **matrix, int n);
 void PrintMatrix(double **matrix, int n);
 void FreeMatrix(double **matrix, int n);
-void SerailMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n);
-void ParallelMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n);
-void ParallelImprovedMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n);
+double SerailMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n);
+double ParallelMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n);
+double ParallelImprovedMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n);
 void StartTime();
 void StopTime();
 double GetTime();
+double GetMean(double *array, int n);
+double GetSD(double *array, double mean, int n);
+int GetSampleSize(double *array, int n);
 
 /*
-    compile => g++ -std=c++11 matrix_multiplication.cpp -o matrix
+    compile => g++ -fopenmp -std=c++11 matrix_multiplication.cpp -o matrix
     run=> ./matrix
 */
 
 main(int argc, char *argv[])
 {
-    //int n = 800;
-    
+    int intial_number_of_samples = 10;
 
-    for (int i = 200; i <= 2000; i += 200)
+    for (int number_of_raws = 200; number_of_raws <= 200; number_of_raws += 200)
     { // call through this loop for each test case
         //std::cout << i << "\n";
+        double *serial_time_array = new double[intial_number_of_samples];
+        double *parallel_time_array = new double[intial_number_of_samples];
+        double *paralel_improved_time_array = new double[intial_number_of_samples];
         srand((time_for_srand.tv_sec * 1000) + (time_for_srand.tv_usec / 1000));
-        initialize(i);
+        for (int sample_num = 0; sample_num < intial_number_of_samples; sample_num++)
+        {
+            double serial_time = 0.0;
+            double parallel_time = 0.0;
+            double paralel_improved_time = 0.0;
+            initialize_run(number_of_raws, &serial_time, &parallel_time, &paralel_improved_time);
+            serial_time_array[sample_num] = serial_time;
+            parallel_time_array[sample_num] = parallel_time;
+            paralel_improved_time_array[sample_num] = paralel_improved_time;
+        }
+
+        std::cout << "\n";
+        
+        std::cout << GetSampleSize(serial_time_array, intial_number_of_samples) << "\n";
+        std::cout << GetSampleSize(parallel_time_array, intial_number_of_samples) << "\n";
+        std::cout << GetSampleSize(paralel_improved_time_array, intial_number_of_samples) << "\n";
     }
-    
 }
 
-void initialize(int n){
+void initialize_run(int n, double *serial_time, double *parallel_time, double *paralel_improved_time)
+{
     double **matrix_a = new double *[n];
     double **matrix_b = new double *[n];
     double **matrix_c = new double *[n];
@@ -55,22 +76,47 @@ void initialize(int n){
     //std::cout << "\n";
     //PrintMatrix(matrix_b,n);
     //std::cout << "\n";
-    
-    SerailMultiply(matrix_a, matrix_b, matrix_c, n);
-    ParallelMultiply(matrix_a, matrix_b, matrix_c, n);
+
+    *serial_time = SerailMultiply(matrix_a, matrix_b, matrix_c, n);
+    *parallel_time = ParallelMultiply(matrix_a, matrix_b, matrix_c, n);
     //PrintMatrix(matrix_c,n);
     //std::cout << "\n";
     TransposeMatrix(matrix_b, n);
     //PrintMatrix(matrix_b,n);
     //std::cout << "\n";
-    ParallelImprovedMultiply(matrix_a, matrix_b, matrix_c, n);
+    *paralel_improved_time = ParallelImprovedMultiply(matrix_a, matrix_b, matrix_c, n);
     //PrintMatrix(matrix_c,n);
     //std::cout << "\n";
 
     FreeMatrix(matrix_a, n);
     FreeMatrix(matrix_b, n);
     FreeMatrix(matrix_c, n);
-    std::cout << "\n";
+}
+
+double GetMean(double *array, int n)
+{
+    double total = 0.0;
+    for (int i = 0; i < n; i++)
+    {
+        total = total + array[i];
+    }
+    return total / (n * 1.0);
+}
+
+double GetSD(double *array, double mean, int n)
+{
+    double standardDeviation = 0.0;
+    for (int i = 0; i < n; ++i)
+    {
+        standardDeviation += pow(array[i] - mean, 2);
+    }
+    return sqrt(standardDeviation / n);
+}
+
+int GetSampleSize(double *array, int n)
+{
+    double mean = GetMean(array, n);
+    return pow(((100 * 1.960 * GetSD(array, mean, n)) / (5 * mean)), 2) + 1;
 }
 
 void CreateFullMatrix(double **matrix, int n)
@@ -112,8 +158,8 @@ void TransposeMatrix(double **matrix, int n)
             matrix[i][j] = matrix_t[j][i];
         }
     }
-    
-    FreeMatrix(matrix_t,n);
+
+    FreeMatrix(matrix_t, n);
 }
 
 void PrintMatrix(double **matrix, int n)
@@ -138,7 +184,7 @@ void FreeMatrix(double **matrix, int n)
 }
 
 // Serail Multiplication of two matrices
-void SerailMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n)
+double SerailMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n)
 {
     StartTime();
     for (int i = 0; i < n; i++)
@@ -154,11 +200,13 @@ void SerailMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int
         }
     }
     StopTime();
-    printf("Serial Time for %d number of columns and rows = %f \n", n, GetTime());
+    double exc_time = GetTime();
+    //printf("Serial Time for %d number of columns and rows = %f \n", n, exc_time);
+    return exc_time;
 }
 
 // Parallel Multiplication of two matrices
-void ParallelMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n)
+double ParallelMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n)
 {
     StartTime();
 #pragma omp parallel
@@ -179,12 +227,14 @@ void ParallelMultiply(double **matrix_a, double **matrix_b, double **matrix_c, i
         }
     }
     StopTime();
-    printf("Parallel Time for %d number of columns and rows = %f \n", n, GetTime());
+    double exc_time = GetTime();
+    //printf("Parallel Time for %d number of columns and rows = %f \n", n, exc_time);
+    return exc_time;
 }
 
 // Parallel Improved Multiplication of two matrices
-void ParallelImprovedMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n)
-{
+double ParallelImprovedMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n)
+{ //Here the matix_b is transposed one
     StartTime();
 #pragma omp parallel
     {
@@ -204,7 +254,9 @@ void ParallelImprovedMultiply(double **matrix_a, double **matrix_b, double **mat
         }
     }
     StopTime();
-    printf("Parallel Improved Time for %d number of columns and rows = %f \n", n, GetTime());
+    double exc_time = GetTime();
+    //printf("Parallel Improved Time for %d number of columns and rows = %f \n", n, exc_time);
+    return exc_time;
 }
 
 void StartTime()
