@@ -13,14 +13,14 @@ double elapsed;
 void run_program(int number_of_raws, double *finalized_serial_time, double *finalized_parallel_time, double *finalized_paralel_improved_time, int *number_of_samples, bool is_counting_no_of_samples);
 void initiate_run(int n, double *serial_time, double *parallel_time, double *paralel_improved_time);
 void CreateFullMatrix(double **matrix, int n);
-void FillMatrix(double **matrix, int n);
-void TransposeMatrix(double **matrix, int n);
-void PrintMatrix(double **matrix, int n);
-void FreeMatrix(double **matrix, int n);
-double SerailMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n);
-double ParallelMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n);
-double ParallelImprovedMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n);
-double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **matrix_c, int n);
+void FillMatrix(double *matrix, int n);
+void TransposeMatrix(double *matrix, int n);
+void PrintMatrix(double *matrix, int n);
+void FreeMatrix(double *matrix, int n);
+double SerailMultiply(double *matrix_a, double *matrix_b, double *matrix_c, int n);
+double ParallelMultiply(double *matrix_a, double *matrix_b, double *matrix_c, int n);
+double ParallelImprovedMultiply(double *matrix_a, double *matrix_b, double *matrix_c, int n);
+double ParallelImprovedMultiply2(double *matrix_a, double *matrix_b, double *matrix_c, int n);
 void StartTime();
 void StopTime();
 double GetTime();
@@ -105,9 +105,9 @@ void run_program(int number_of_raws, double *finalized_serial_time, double *fina
 
 void initiate_run(int n, double *serial_time, double *parallel_time, double *paralel_improved_time)
 { //actually run the matrix multiplication
-    double *matrix_a = new double *[n*n];
-    double *matrix_b = new double *[n*n];
-    double *matrix_c = new double *[n*n];
+    double *matrix_a = new double[n*n];
+    double *matrix_b = new double[n*n];
+    double *matrix_c = new double[n*n];
     // CreateFullMatrix(matrix_a, n);
     // CreateFullMatrix(matrix_b, n);
     // CreateFullMatrix(matrix_c, n);
@@ -174,7 +174,7 @@ void FillMatrix(double *matrix, int n)
 
 void TransposeMatrix(double *matrix, int n)
 { //Get the transpose matrix
-    double *matrix_t = new double *[n*n];
+    double *matrix_t = new double[n*n];
     // CreateFullMatrix(matrix_t, n);
 
     for (int i = 0; i < n; ++i)
@@ -397,7 +397,7 @@ double ParallelImprovedMultiply2(double *matrix_a, double *matrix_b, double *mat
     }
     StopTime();
     double exc_time = GetTime();
-    printf("Parallel Improved Time for %d number of columns and rows = %f \n", n, GetTime());    
+    // printf("Parallel Improved Time for %d number of columns and rows = %f \n", n, GetTime());    
     return exc_time;
 }
 
