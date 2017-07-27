@@ -44,19 +44,26 @@ main(int argc, char *argv[])
     for (int number_of_raws = 200; number_of_raws <= 2000; number_of_raws += 200)
     { // call through this loop for each test case
         int runing_number_of_samples = intial_number_of_samples;
+
+        // Run for finding the sufficient number of samples //
         run_program(number_of_raws, &finalized_serial_time, &finalized_parallel_time, &finalized_paralel_improved_time, &runing_number_of_samples, true);
-        printf("No of samples runing for %d raws matrix = %d\n", number_of_raws, runing_number_of_samples);
+        printf("No of samples runing for %d rows matrix = %d\n", number_of_raws, runing_number_of_samples);
+
+        //run for actual time measurements with the calculated number of samples //
         run_program(number_of_raws, &finalized_serial_time, &finalized_parallel_time, &finalized_paralel_improved_time, &runing_number_of_samples, false);
-        printf("Time for serial multiplication of %d raws matrix = %f\n", number_of_raws, finalized_serial_time);
-        printf("Time for Parallel multiplication of %d raws matrix = %f\n", number_of_raws, finalized_parallel_time);
-        printf("Time for Parallel Improved multiplication of %d raws matrix = %f\n", number_of_raws, finalized_paralel_improved_time);
+
+        printf("Time for sequential multiplication of %d rows matrix = %f\n", number_of_raws, finalized_serial_time);
+        printf("Time for Parallel multiplication of %d rows matrix = %f\n", number_of_raws, finalized_parallel_time);
+        printf("Time for Parallel Improved multiplication of %d rows matrix = %f\n", number_of_raws, finalized_paralel_improved_time);
         std::cout << "\n";
     }
 }
 
 void run_program(int number_of_raws, double *finalized_serial_time, double *finalized_parallel_time, double *finalized_paralel_improved_time, int *number_of_samples, bool is_counting_no_of_samples)
-{
-    double *serial_time_array = new double[*number_of_samples];           //time array of serial multiplication
+{   
+    // This will run the matrix multiplication for both sample calculation and timemeasurements. If the value of the is_counting_no_of_samples is true then
+    // it will calculate the no of sufficient samples and if it is false then it will calculate the actual time measurement(results).
+    double *serial_time_array = new double[*number_of_samples];           //time array of sequential multiplication
     double *parallel_time_array = new double[*number_of_samples];         //time array of parallel multiplication
     double *paralel_improved_time_array = new double[*number_of_samples]; //time array of parallel improved multiplication
     srand((time_for_srand.tv_sec * 1000) + (time_for_srand.tv_usec / 1000));
@@ -86,8 +93,9 @@ void run_program(int number_of_raws, double *finalized_serial_time, double *fina
         {
             max = parallel_improved_sample;
         }
-        if(max>100){
-            max=100;
+        if (max > 100)
+        {
+            max = 100;
         }
         *number_of_samples = max;
     }
@@ -115,14 +123,15 @@ void initiate_run(int n, double *serial_time, double *parallel_time, double *par
     FillMatrix(matrix_a, n);
     FillMatrix(matrix_b, n);
 
-    *serial_time = SerailMultiply(matrix_a, matrix_b, matrix_c, n);// call serail multiplication
-    *parallel_time = ParallelMultiply(matrix_a, matrix_b, matrix_c, n);// call parallel multiplication
+    *serial_time = SerailMultiply(matrix_a, matrix_b, matrix_c, n);     // call serail multiplication
+    *parallel_time = ParallelMultiply(matrix_a, matrix_b, matrix_c, n); // call parallel multiplication
 
-    TransposeMatrix(matrix_b, n);// Taking transpose of B and put it in B.
-    //*paralel_improved_time = ParallelImprovedMultiply(matrix_a, matrix_b, matrix_c, n);// call improved parallel multiplication
+    TransposeMatrix(matrix_b, n); // Taking transpose of B and put it in B.
+    // run the improved version of  parallel multiplication //
+    //*paralel_improved_time = ParallelImprovedMultiply(matrix_a, matrix_b, matrix_c, n);// Only transposed matrix with parallel
     *paralel_improved_time = ParallelImprovedMultiply2(matrix_a, matrix_b, matrix_c, n);
 
-    FreeMatrix(matrix_a, n);
+    FreeMatrix(matrix_a, n); // Free the memory locations of matrix
     FreeMatrix(matrix_b, n);
     FreeMatrix(matrix_c, n);
 }
@@ -243,14 +252,14 @@ double SerailMultiply(double **matrix_a, double **matrix_b, double **matrix_c, i
 double ParallelMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n)
 {
     StartTime();
-// #pragma omp parallel
+    // #pragma omp parallel
     {
-        // int i, j, k;
+// int i, j, k;
 // #pragma omp for
 #pragma omp parallel for
         for (int i = 0; i < n; i++)
         {
-// #pragma omp parallel for
+            // #pragma omp parallel for
             for (int j = 0; j < n; j++)
             {
                 double multiply_sum = 0;
@@ -272,13 +281,13 @@ double ParallelMultiply(double **matrix_a, double **matrix_b, double **matrix_c,
 double ParallelImprovedMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n)
 { //Here the matix_b is transposed one
     StartTime();
-// #pragma omp parallel
+    // #pragma omp parallel
     {
-        // int i, j, k;
+// int i, j, k;
 #pragma omp parallel for
         for (int i = 0; i < n; i++)
         {
-// #pragma omp parallel for
+            // #pragma omp parallel for
             for (int j = 0; j < n; j++)
             {
                 double multiply_sum = 0;
@@ -300,15 +309,15 @@ double ParallelImprovedMultiply(double **matrix_a, double **matrix_b, double **m
 double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **matrix_c, int n)
 {
     StartTime();
-// #pragma omp parallel
+    // #pragma omp parallel
     {
-        // int i, j, k;
+// int i, j, k;
 #pragma omp parallel for
         for (int i = 0; i < n; i++)
         {
-            for (int j = 0; j < n; j=j+8)
+            for (int j = 0; j < n; j = j + 8)
             {
-                double multiply_sum[] = {0,0,0,0,0,0,0,0};
+                double multiply_sum[] = {0, 0, 0, 0, 0, 0, 0, 0};
                 for (int k = 0; k < n; k++)
                 {
                     multiply_sum[0] += matrix_a[i][k] * matrix_b[j][k];
@@ -320,7 +329,7 @@ double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **
                     // multiply_sum[0] += matrix_a[i][k+6] * matrix_b[j][k+6];
                     // multiply_sum[0] += matrix_a[i][k+7] * matrix_b[j][k+7];
 
-                    multiply_sum[1] += matrix_a[i][k] * matrix_b[j+1][k];
+                    multiply_sum[1] += matrix_a[i][k] * matrix_b[j + 1][k];
                     // multiply_sum[1] += matrix_a[i][k+1] * matrix_b[j][k+1];
                     // multiply_sum[1] += matrix_a[i][k+2] * matrix_b[j][k+2];
                     // multiply_sum[1] += matrix_a[i][k+3] * matrix_b[j][k+3];
@@ -329,7 +338,7 @@ double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **
                     // multiply_sum[1] += matrix_a[i][k+6] * matrix_b[j][k+6];
                     // multiply_sum[1] += matrix_a[i][k+7] * matrix_b[j][k+7];
 
-                    multiply_sum[2] += matrix_a[i][k] * matrix_b[j+2][k];
+                    multiply_sum[2] += matrix_a[i][k] * matrix_b[j + 2][k];
                     // multiply_sum[2] += matrix_a[i][k+1] * matrix_b[j][k+1];
                     // multiply_sum[2] += matrix_a[i][k+2] * matrix_b[j][k+2];
                     // multiply_sum[2] += matrix_a[i][k+3] * matrix_b[j][k+3];
@@ -338,7 +347,7 @@ double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **
                     // multiply_sum[2] += matrix_a[i][k+6] * matrix_b[j][k+6];
                     // multiply_sum[2] += matrix_a[i][k+7] * matrix_b[j][k+7];
 
-                    multiply_sum[3] += matrix_a[i][k] * matrix_b[j+3][k];
+                    multiply_sum[3] += matrix_a[i][k] * matrix_b[j + 3][k];
                     // multiply_sum[3] += matrix_a[i][k+1] * matrix_b[j][k+1];
                     // multiply_sum[3] += matrix_a[i][k+2] * matrix_b[j][k+2];
                     // multiply_sum[3] += matrix_a[i][k+3] * matrix_b[j][k+3];
@@ -347,7 +356,7 @@ double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **
                     // multiply_sum[3] += matrix_a[i][k+6] * matrix_b[j][k+6];
                     // multiply_sum[3] += matrix_a[i][k+7] * matrix_b[j][k+7];
 
-                    multiply_sum[4] += matrix_a[i][k] * matrix_b[j+4][k];
+                    multiply_sum[4] += matrix_a[i][k] * matrix_b[j + 4][k];
                     // multiply_sum[4] += matrix_a[i][k+1] * matrix_b[j][k+1];
                     // multiply_sum[4] += matrix_a[i][k+2] * matrix_b[j][k+2];
                     // multiply_sum[4] += matrix_a[i][k+3] * matrix_b[j][k+3];
@@ -355,8 +364,8 @@ double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **
                     // multiply_sum[4] += matrix_a[i][k+5] * matrix_b[j][k+5];
                     // multiply_sum[4] += matrix_a[i][k+6] * matrix_b[j][k+6];
                     // multiply_sum[4] += matrix_a[i][k+7] * matrix_b[j][k+7];
-                    
-                    multiply_sum[5] += matrix_a[i][k] * matrix_b[j+5][k];
+
+                    multiply_sum[5] += matrix_a[i][k] * matrix_b[j + 5][k];
                     // multiply_sum[5] += matrix_a[i][k+1] * matrix_b[j][k+1];
                     // multiply_sum[5] += matrix_a[i][k+2] * matrix_b[j][k+2];
                     // multiply_sum[5] += matrix_a[i][k+3] * matrix_b[j][k+3];
@@ -365,7 +374,7 @@ double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **
                     // multiply_sum[5] += matrix_a[i][k+6] * matrix_b[j][k+6];
                     // multiply_sum[5] += matrix_a[i][k+7] * matrix_b[j][k+7];
 
-                    multiply_sum[6] += matrix_a[i][k] * matrix_b[j+6][k];
+                    multiply_sum[6] += matrix_a[i][k] * matrix_b[j + 6][k];
                     // multiply_sum[6] += matrix_a[i][k+1] * matrix_b[j][k+1];
                     // multiply_sum[6] += matrix_a[i][k+2] * matrix_b[j][k+2];
                     // multiply_sum[6] += matrix_a[i][k+3] * matrix_b[j][k+3];
@@ -374,7 +383,7 @@ double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **
                     // multiply_sum[6] += matrix_a[i][k+6] * matrix_b[j][k+6];
                     // multiply_sum[6] += matrix_a[i][k+7] * matrix_b[j][k+7];
 
-                    multiply_sum[7] += matrix_a[i][k] * matrix_b[j+7][k];
+                    multiply_sum[7] += matrix_a[i][k] * matrix_b[j + 7][k];
                     // multiply_sum[7] += matrix_a[i][k+1] * matrix_b[j][k+1];
                     // multiply_sum[7] += matrix_a[i][k+2] * matrix_b[j][k+2];
                     // multiply_sum[7] += matrix_a[i][k+3] * matrix_b[j][k+3];
@@ -382,22 +391,21 @@ double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **
                     // multiply_sum[7] += matrix_a[i][k+5] * matrix_b[j][k+5];
                     // multiply_sum[7] += matrix_a[i][k+6] * matrix_b[j][k+6];
                     // multiply_sum[7] += matrix_a[i][k+7] * matrix_b[j][k+7];
-
                 }
                 matrix_c[i][j] = multiply_sum[0];
-                matrix_c[i][j+1] = multiply_sum[1];
-                matrix_c[i][j+2] = multiply_sum[2];
-                matrix_c[i][j+3] = multiply_sum[3];
-                matrix_c[i][j+4] = multiply_sum[4];
-                matrix_c[i][j+5] = multiply_sum[5];
-                matrix_c[i][j+6] = multiply_sum[6];
-                matrix_c[i][j+7] = multiply_sum[7];
+                matrix_c[i][j + 1] = multiply_sum[1];
+                matrix_c[i][j + 2] = multiply_sum[2];
+                matrix_c[i][j + 3] = multiply_sum[3];
+                matrix_c[i][j + 4] = multiply_sum[4];
+                matrix_c[i][j + 5] = multiply_sum[5];
+                matrix_c[i][j + 6] = multiply_sum[6];
+                matrix_c[i][j + 7] = multiply_sum[7];
             }
         }
     }
     StopTime();
     double exc_time = GetTime();
-    printf("Parallel Improved Time for %d number of columns and rows = %f \n", n, GetTime());    
+    //printf("Parallel Improved Time for %d number of columns and rows = %f \n", n, GetTime());
     return exc_time;
 }
 
