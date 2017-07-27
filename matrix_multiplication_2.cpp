@@ -13,15 +13,14 @@ double elapsed;
 void run_program(int number_of_raws, double *finalized_serial_time, double *finalized_parallel_time, double *finalized_paralel_improved_time, int *number_of_samples, bool is_counting_no_of_samples);
 void initiate_run(int n, double *serial_time, double *parallel_time, double *paralel_improved_time);
 void CreateFullMatrix(double **matrix, int n);
-void FillMatrix(double **matrix, int n);
-void TransposeMatrix(double **matrix, int n);
-void TransposeMatrix_1D(double *matrix, int n);
-void PrintMatrix(double **matrix, int n);
-void FreeMatrix(double **matrix, int n);
-double SerailMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n);
-double ParallelMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n);
-double ParallelImprovedMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n);
-double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **matrix_c, int n);
+void FillMatrix(double *matrix, int n);
+void TransposeMatrix(double *matrix, int n);
+void PrintMatrix(double *matrix, int n);
+void FreeMatrix(double *matrix, int n);
+double SerailMultiply(double *matrix_a, double *matrix_b, double *matrix_c, int n);
+double ParallelMultiply(double *matrix_a, double *matrix_b, double *matrix_c, int n);
+double ParallelImprovedMultiply(double *matrix_a, double *matrix_b, double *matrix_c, int n);
+double ParallelImprovedMultiply2(double *matrix_a, double *matrix_b, double *matrix_c, int n);
 void StartTime();
 void StopTime();
 double GetTime();
@@ -45,26 +44,19 @@ main(int argc, char *argv[])
     for (int number_of_raws = 200; number_of_raws <= 2000; number_of_raws += 200)
     { // call through this loop for each test case
         int runing_number_of_samples = intial_number_of_samples;
-
-        // Run for finding the sufficient number of samples //
         run_program(number_of_raws, &finalized_serial_time, &finalized_parallel_time, &finalized_paralel_improved_time, &runing_number_of_samples, true);
-        printf("No of samples runing for %d rows matrix = %d\n", number_of_raws, runing_number_of_samples);
-
-        //run for actual time measurements with the calculated number of samples //
+        printf("No of samples runing for %d raws matrix = %d\n", number_of_raws, runing_number_of_samples);
         run_program(number_of_raws, &finalized_serial_time, &finalized_parallel_time, &finalized_paralel_improved_time, &runing_number_of_samples, false);
-
-        printf("Time for sequential multiplication of %d rows matrix = %f\n", number_of_raws, finalized_serial_time);
-        printf("Time for Parallel multiplication of %d rows matrix = %f\n", number_of_raws, finalized_parallel_time);
-        printf("Time for Parallel Improved multiplication of %d rows matrix = %f\n", number_of_raws, finalized_paralel_improved_time);
+        printf("Time for serial multiplication of %d raws matrix = %f\n", number_of_raws, finalized_serial_time);
+        printf("Time for Parallel multiplication of %d raws matrix = %f\n", number_of_raws, finalized_parallel_time);
+        printf("Time for Parallel Improved multiplication of %d raws matrix = %f\n", number_of_raws, finalized_paralel_improved_time);
         std::cout << "\n";
     }
 }
 
 void run_program(int number_of_raws, double *finalized_serial_time, double *finalized_parallel_time, double *finalized_paralel_improved_time, int *number_of_samples, bool is_counting_no_of_samples)
-{   
-    // This will run the matrix multiplication for both sample calculation and timemeasurements. If the value of the is_counting_no_of_samples is true then
-    // it will calculate the no of sufficient samples and if it is false then it will calculate the actual time measurement(results).
-    double *serial_time_array = new double[*number_of_samples];           //time array of sequential multiplication
+{
+    double *serial_time_array = new double[*number_of_samples];           //time array of serial multiplication
     double *parallel_time_array = new double[*number_of_samples];         //time array of parallel multiplication
     double *paralel_improved_time_array = new double[*number_of_samples]; //time array of parallel improved multiplication
     srand((time_for_srand.tv_sec * 1000) + (time_for_srand.tv_usec / 1000));
@@ -94,9 +86,8 @@ void run_program(int number_of_raws, double *finalized_serial_time, double *fina
         {
             max = parallel_improved_sample;
         }
-        if (max > 100)
-        {
-            max = 100;
+        if(max>100){
+            max=100;
         }
         *number_of_samples = max;
     }
@@ -114,35 +105,26 @@ void run_program(int number_of_raws, double *finalized_serial_time, double *fina
 
 void initiate_run(int n, double *serial_time, double *parallel_time, double *paralel_improved_time)
 { //actually run the matrix multiplication
-    double **matrix_a = new double *[n];
-    double **matrix_b = new double *[n];
-    double **matrix_c = new double *[n];
-    CreateFullMatrix(matrix_a, n);
-    CreateFullMatrix(matrix_b, n);
-    CreateFullMatrix(matrix_c, n);
+    double *matrix_a = new double[n*n];
+    double *matrix_b = new double[n*n];
+    double *matrix_c = new double[n*n];
+    // CreateFullMatrix(matrix_a, n);
+    // CreateFullMatrix(matrix_b, n);
+    // CreateFullMatrix(matrix_c, n);
 
-    double *matrix_a_1D = new double[n*n];
-    double *matrix_b_1D = new double[n*n];
-    double *matrix_c_1D = new double[n*n];
+    FillMatrix(matrix_a, n);
+    FillMatrix(matrix_b, n);
 
-    FillMatrix(matrix_a, matrix_a_1D, n);
-    FillMatrix(matrix_b, matrix_b_1D, n);
+    *serial_time = SerailMultiply(matrix_a, matrix_b, matrix_c, n);// call serail multiplication
+    *parallel_time = ParallelMultiply(matrix_a, matrix_b, matrix_c, n);// call parallel multiplication
 
-    *serial_time = SerailMultiply(matrix_a, matrix_b, matrix_c, n);     // call serail multiplication
-    *parallel_time = ParallelMultiply(matrix_a, matrix_b, matrix_c, n); // call parallel multiplication
+    TransposeMatrix(matrix_b, n);// Taking transpose of B and put it in B.
+    //*paralel_improved_time = ParallelImprovedMultiply(matrix_a, matrix_b, matrix_c, n);// call improved parallel multiplication
+    *paralel_improved_time = ParallelImprovedMultiply2(matrix_a, matrix_b, matrix_c, n);
 
-    // TransposeMatrix(matrix_b, n); // Taking transpose of B and put it in B.
-    TransposeMatrix_1D(matrix_b_1D, n);
-    // run the improved version of  parallel multiplication //
-    //*paralel_improved_time = ParallelImprovedMultiply(matrix_a, matrix_b, matrix_c, n);// Only transposed matrix with parallel
-    *paralel_improved_time = ParallelImprovedMultiply2(matrix_a_1D, matrix_b_1D, matrix_c_1D, n);
-
-    FreeMatrix(matrix_a, n); // Free the memory locations of matrix
+    FreeMatrix(matrix_a, n);
     FreeMatrix(matrix_b, n);
     FreeMatrix(matrix_c, n);
-    delete[] matrix_a_1D;
-    delete[] matrix_b_1D;
-    delete[] matrix_c_1D;
 }
 
 double GetMean(double *array, int n)
@@ -179,44 +161,18 @@ void CreateFullMatrix(double **matrix, int n)
     }
 }
 
-void FillMatrix(double **matrix, double *matrix_1D, int n)
+void FillMatrix(double *matrix, int n)
 { // Random generated double values for matrix
     for (int i = 0; i < n; ++i)
     {
         for (int j = 0; j < n; ++j)
         {
-            double element = rand() / 1.01;
-            matrix[i][j] = element;
-            matrix[n*i + j] = element;
+            matrix[n*i + j] = rand() / 1.01;
         }
     }
 }
 
-void TransposeMatrix(double **matrix, int n)
-{ //Get the transpose matrix
-    double **matrix_t = new double *[n];
-    CreateFullMatrix(matrix_t, n);
-
-    for (int i = 0; i < n; ++i)
-    {
-        for (int j = 0; j < n; ++j)
-        {
-            matrix_t[i][j] = matrix[i][j];
-        }
-    }
-
-    for (int i = 0; i < n; ++i)
-    {
-        for (int j = 0; j < n; ++j)
-        {
-            matrix[i][j] = matrix_t[j][i];
-        }
-    }
-
-    FreeMatrix(matrix_t, n);
-}
-
-void TransposeMatrix_1D(double *matrix, int n)
+void TransposeMatrix(double *matrix, int n)
 { //Get the transpose matrix
     double *matrix_t = new double[n*n];
     // CreateFullMatrix(matrix_t, n);
@@ -240,29 +196,29 @@ void TransposeMatrix_1D(double *matrix, int n)
     FreeMatrix(matrix_t, n);
 }
 
-void PrintMatrix(double **matrix, int n)
+void PrintMatrix(double *matrix, int n)
 {
     for (int i = 0; i < n; ++i)
     {
         for (int j = 0; j < n; ++j)
         {
-            std::cout << matrix[i][j] << " ";
+            std::cout << matrix[i*n+j] << " ";
         }
         std::cout << std::endl;
     }
 }
 
-void FreeMatrix(double **matrix, int n)
+void FreeMatrix(double *matrix, int n)
 { // Delete matrix memory
-    for (int i = 0; i < n; ++i)
-    {
-        delete[] matrix[i];
-    }
+    // for (int i = 0; i < n; ++i)
+    // {
+    //     delete[] matrix[i];
+    // }
     delete[] matrix;
 }
 
 // Serail Multiplication of two matrices
-double SerailMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n)
+double SerailMultiply(double *matrix_a, double *matrix_b, double *matrix_c, int n)
 {
     StartTime();
     for (int i = 0; i < n; i++)
@@ -272,9 +228,9 @@ double SerailMultiply(double **matrix_a, double **matrix_b, double **matrix_c, i
             double multiply_sum = 0;
             for (int k = 0; k < n; k++)
             {
-                multiply_sum += matrix_a[i][k] * matrix_b[k][j];
+                multiply_sum += matrix_a[i*n+k] * matrix_b[k*n+j];
             }
-            matrix_c[i][j] = multiply_sum;
+            matrix_c[i*n+j] = multiply_sum;
         }
     }
     StopTime();
@@ -284,25 +240,25 @@ double SerailMultiply(double **matrix_a, double **matrix_b, double **matrix_c, i
 }
 
 // Parallel Multiplication of two matrices
-double ParallelMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n)
+double ParallelMultiply(double *matrix_a, double *matrix_b, double *matrix_c, int n)
 {
     StartTime();
-    // #pragma omp parallel
+// #pragma omp parallel
     {
-// int i, j, k;
+        // int i, j, k;
 // #pragma omp for
 #pragma omp parallel for
         for (int i = 0; i < n; i++)
         {
-            // #pragma omp parallel for
+// #pragma omp parallel for
             for (int j = 0; j < n; j++)
             {
                 double multiply_sum = 0;
                 for (int k = 0; k < n; k++)
                 {
-                    multiply_sum += matrix_a[i][k] * matrix_b[k][j];
+                    multiply_sum += matrix_a[i*n+k] * matrix_b[k*n+j];
                 }
-                matrix_c[i][j] = multiply_sum;
+                matrix_c[i*n+j] = multiply_sum;
             }
         }
     }
@@ -313,24 +269,24 @@ double ParallelMultiply(double **matrix_a, double **matrix_b, double **matrix_c,
 }
 
 // Parallel Improved Multiplication of two matrices
-double ParallelImprovedMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n)
+double ParallelImprovedMultiply(double *matrix_a, double *matrix_b, double *matrix_c, int n)
 { //Here the matix_b is transposed one
     StartTime();
-    // #pragma omp parallel
+// #pragma omp parallel
     {
-// int i, j, k;
+        // int i, j, k;
 #pragma omp parallel for
         for (int i = 0; i < n; i++)
         {
-            // #pragma omp parallel for
+// #pragma omp parallel for
             for (int j = 0; j < n; j++)
             {
                 double multiply_sum = 0;
                 for (int k = 0; k < n; k++)
                 {
-                    multiply_sum += matrix_a[i][k] * matrix_b[j][k];
+                    multiply_sum += matrix_a[i*n+k] * matrix_b[j*n+k];
                 }
-                matrix_c[i][j] = multiply_sum;
+                matrix_c[i*n+j] = multiply_sum;
             }
         }
     }
