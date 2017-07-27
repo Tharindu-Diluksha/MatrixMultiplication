@@ -13,7 +13,7 @@ double elapsed;
 void run_program(int number_of_raws, double *finalized_serial_time, double *finalized_parallel_time, double *finalized_paralel_improved_time, int *number_of_samples, bool is_counting_no_of_samples);
 void initiate_run(int n, double *serial_time, double *parallel_time, double *paralel_improved_time);
 void CreateFullMatrix(double **matrix, int n);
-void FillMatrix(double **matrix, int n);
+void FillMatrix(double **matrix, double *matrix_1D, int n);
 void TransposeMatrix(double **matrix, int n);
 void TransposeMatrix_1D(double *matrix, int n);
 void PrintMatrix(double **matrix, int n);
@@ -21,7 +21,7 @@ void FreeMatrix(double **matrix, int n);
 double SerailMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n);
 double ParallelMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n);
 double ParallelImprovedMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n);
-double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **matrix_c, int n);
+double ParallelImprovedMultiply2(double *matrix_a, double *matrix_b, double *matrix_c, int n);
 void StartTime();
 void StopTime();
 double GetTime();
@@ -187,7 +187,7 @@ void FillMatrix(double **matrix, double *matrix_1D, int n)
         {
             double element = rand() / 1.01;
             matrix[i][j] = element;
-            matrix[n*i + j] = element;
+            matrix_1D[n*i + j] = element;
         }
     }
 }
@@ -237,7 +237,7 @@ void TransposeMatrix_1D(double *matrix, int n)
         }
     }
 
-    FreeMatrix(matrix_t, n);
+    delete[] matrix_t;
 }
 
 void PrintMatrix(double **matrix, int n)
