@@ -15,6 +15,7 @@ void initiate_run(int n, double *serial_time, double *parallel_time, double *par
 void CreateFullMatrix(double **matrix, int n);
 void FillMatrix(double **matrix, int n);
 void TransposeMatrix(double **matrix, int n);
+void TransposeMatrix_1D(double *matrix, int n);
 void PrintMatrix(double **matrix, int n);
 void FreeMatrix(double **matrix, int n);
 double SerailMultiply(double **matrix_a, double **matrix_b, double **matrix_c, int n);
@@ -120,20 +121,28 @@ void initiate_run(int n, double *serial_time, double *parallel_time, double *par
     CreateFullMatrix(matrix_b, n);
     CreateFullMatrix(matrix_c, n);
 
-    FillMatrix(matrix_a, n);
-    FillMatrix(matrix_b, n);
+    double *matrix_a_1D = new double[n*n];
+    double *matrix_b_1D = new double[n*n];
+    double *matrix_c_1D = new double[n*n];
+
+    FillMatrix(matrix_a, matrix_a_1D, n);
+    FillMatrix(matrix_b, matrix_b_1D, n);
 
     *serial_time = SerailMultiply(matrix_a, matrix_b, matrix_c, n);     // call serail multiplication
     *parallel_time = ParallelMultiply(matrix_a, matrix_b, matrix_c, n); // call parallel multiplication
 
-    TransposeMatrix(matrix_b, n); // Taking transpose of B and put it in B.
+    // TransposeMatrix(matrix_b, n); // Taking transpose of B and put it in B.
+    TransposeMatrix_1D(matrix_b_1D, n);
     // run the improved version of  parallel multiplication //
     //*paralel_improved_time = ParallelImprovedMultiply(matrix_a, matrix_b, matrix_c, n);// Only transposed matrix with parallel
-    *paralel_improved_time = ParallelImprovedMultiply2(matrix_a, matrix_b, matrix_c, n);
+    *paralel_improved_time = ParallelImprovedMultiply2(matrix_a_1D, matrix_b_1D, matrix_c_1D, n);
 
     FreeMatrix(matrix_a, n); // Free the memory locations of matrix
     FreeMatrix(matrix_b, n);
     FreeMatrix(matrix_c, n);
+    delete[] matrix_a_1D;
+    delete[] matrix_b_1D;
+    delete[] matrix_c_1D;
 }
 
 double GetMean(double *array, int n)
@@ -170,13 +179,15 @@ void CreateFullMatrix(double **matrix, int n)
     }
 }
 
-void FillMatrix(double **matrix, int n)
+void FillMatrix(double **matrix, double *matrix_1D, int n)
 { // Random generated double values for matrix
     for (int i = 0; i < n; ++i)
     {
         for (int j = 0; j < n; ++j)
         {
-            matrix[i][j] = rand() / 1.01;
+            double element = rand() / 1.01;
+            matrix[i][j] = element;
+            matrix[n*i + j] = element;
         }
     }
 }
@@ -199,6 +210,30 @@ void TransposeMatrix(double **matrix, int n)
         for (int j = 0; j < n; ++j)
         {
             matrix[i][j] = matrix_t[j][i];
+        }
+    }
+
+    FreeMatrix(matrix_t, n);
+}
+
+void TransposeMatrix_1D(double *matrix, int n)
+{ //Get the transpose matrix
+    double *matrix_t = new double[n*n];
+    // CreateFullMatrix(matrix_t, n);
+
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < n; ++j)
+        {
+            matrix_t[i*n+j] = matrix[i*n+j];
+        }
+    }
+
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < n; ++j)
+        {
+            matrix[i*n+j] = matrix_t[j*n+i];
         }
     }
 
@@ -306,21 +341,21 @@ double ParallelImprovedMultiply(double **matrix_a, double **matrix_b, double **m
 }
 
 // Parallel Improved Multiplication of two matrices - 2
-double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **matrix_c, int n)
+double ParallelImprovedMultiply2(double *matrix_a, double *matrix_b, double *matrix_c, int n)
 {
     StartTime();
-    // #pragma omp parallel
+// #pragma omp parallel
     {
-// int i, j, k;
+        // int i, j, k;
 #pragma omp parallel for
         for (int i = 0; i < n; i++)
         {
-            for (int j = 0; j < n; j = j + 8)
+            for (int j = 0; j < n; j=j+8)
             {
-                double multiply_sum[] = {0, 0, 0, 0, 0, 0, 0, 0};
+                double multiply_sum[] = {0,0,0,0,0,0,0,0};
                 for (int k = 0; k < n; k++)
                 {
-                    multiply_sum[0] += matrix_a[i][k] * matrix_b[j][k];
+                    multiply_sum[0] += matrix_a[i*n+k] * matrix_b[j*n+k];
                     // multiply_sum[0] += matrix_a[i][k+1] * matrix_b[j][k+1];
                     // multiply_sum[0] += matrix_a[i][k+2] * matrix_b[j][k+2];
                     // multiply_sum[0] += matrix_a[i][k+3] * matrix_b[j][k+3];
@@ -329,7 +364,7 @@ double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **
                     // multiply_sum[0] += matrix_a[i][k+6] * matrix_b[j][k+6];
                     // multiply_sum[0] += matrix_a[i][k+7] * matrix_b[j][k+7];
 
-                    multiply_sum[1] += matrix_a[i][k] * matrix_b[j + 1][k];
+                    multiply_sum[1] += matrix_a[i*n+k] * matrix_b[(j+1)*n+k];
                     // multiply_sum[1] += matrix_a[i][k+1] * matrix_b[j][k+1];
                     // multiply_sum[1] += matrix_a[i][k+2] * matrix_b[j][k+2];
                     // multiply_sum[1] += matrix_a[i][k+3] * matrix_b[j][k+3];
@@ -338,7 +373,7 @@ double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **
                     // multiply_sum[1] += matrix_a[i][k+6] * matrix_b[j][k+6];
                     // multiply_sum[1] += matrix_a[i][k+7] * matrix_b[j][k+7];
 
-                    multiply_sum[2] += matrix_a[i][k] * matrix_b[j + 2][k];
+                    multiply_sum[2] += matrix_a[i*n+k] * matrix_b[(j+2)*n+k];
                     // multiply_sum[2] += matrix_a[i][k+1] * matrix_b[j][k+1];
                     // multiply_sum[2] += matrix_a[i][k+2] * matrix_b[j][k+2];
                     // multiply_sum[2] += matrix_a[i][k+3] * matrix_b[j][k+3];
@@ -347,7 +382,7 @@ double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **
                     // multiply_sum[2] += matrix_a[i][k+6] * matrix_b[j][k+6];
                     // multiply_sum[2] += matrix_a[i][k+7] * matrix_b[j][k+7];
 
-                    multiply_sum[3] += matrix_a[i][k] * matrix_b[j + 3][k];
+                    multiply_sum[3] += matrix_a[i*n+k] * matrix_b[(j+3)*n+k];
                     // multiply_sum[3] += matrix_a[i][k+1] * matrix_b[j][k+1];
                     // multiply_sum[3] += matrix_a[i][k+2] * matrix_b[j][k+2];
                     // multiply_sum[3] += matrix_a[i][k+3] * matrix_b[j][k+3];
@@ -356,7 +391,7 @@ double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **
                     // multiply_sum[3] += matrix_a[i][k+6] * matrix_b[j][k+6];
                     // multiply_sum[3] += matrix_a[i][k+7] * matrix_b[j][k+7];
 
-                    multiply_sum[4] += matrix_a[i][k] * matrix_b[j + 4][k];
+                    multiply_sum[4] += matrix_a[i*n+k] * matrix_b[(j+4)*n+k];
                     // multiply_sum[4] += matrix_a[i][k+1] * matrix_b[j][k+1];
                     // multiply_sum[4] += matrix_a[i][k+2] * matrix_b[j][k+2];
                     // multiply_sum[4] += matrix_a[i][k+3] * matrix_b[j][k+3];
@@ -364,8 +399,8 @@ double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **
                     // multiply_sum[4] += matrix_a[i][k+5] * matrix_b[j][k+5];
                     // multiply_sum[4] += matrix_a[i][k+6] * matrix_b[j][k+6];
                     // multiply_sum[4] += matrix_a[i][k+7] * matrix_b[j][k+7];
-
-                    multiply_sum[5] += matrix_a[i][k] * matrix_b[j + 5][k];
+                    
+                    multiply_sum[5] += matrix_a[i*n+k] * matrix_b[(j+5)*n+k];
                     // multiply_sum[5] += matrix_a[i][k+1] * matrix_b[j][k+1];
                     // multiply_sum[5] += matrix_a[i][k+2] * matrix_b[j][k+2];
                     // multiply_sum[5] += matrix_a[i][k+3] * matrix_b[j][k+3];
@@ -374,7 +409,7 @@ double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **
                     // multiply_sum[5] += matrix_a[i][k+6] * matrix_b[j][k+6];
                     // multiply_sum[5] += matrix_a[i][k+7] * matrix_b[j][k+7];
 
-                    multiply_sum[6] += matrix_a[i][k] * matrix_b[j + 6][k];
+                    multiply_sum[6] += matrix_a[i*n+k] * matrix_b[(j+6)*n+k];
                     // multiply_sum[6] += matrix_a[i][k+1] * matrix_b[j][k+1];
                     // multiply_sum[6] += matrix_a[i][k+2] * matrix_b[j][k+2];
                     // multiply_sum[6] += matrix_a[i][k+3] * matrix_b[j][k+3];
@@ -383,7 +418,7 @@ double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **
                     // multiply_sum[6] += matrix_a[i][k+6] * matrix_b[j][k+6];
                     // multiply_sum[6] += matrix_a[i][k+7] * matrix_b[j][k+7];
 
-                    multiply_sum[7] += matrix_a[i][k] * matrix_b[j + 7][k];
+                    multiply_sum[7] += matrix_a[i*n+k] * matrix_b[(j+7)*n+k];
                     // multiply_sum[7] += matrix_a[i][k+1] * matrix_b[j][k+1];
                     // multiply_sum[7] += matrix_a[i][k+2] * matrix_b[j][k+2];
                     // multiply_sum[7] += matrix_a[i][k+3] * matrix_b[j][k+3];
@@ -391,21 +426,22 @@ double ParallelImprovedMultiply2(double **matrix_a, double **matrix_b, double **
                     // multiply_sum[7] += matrix_a[i][k+5] * matrix_b[j][k+5];
                     // multiply_sum[7] += matrix_a[i][k+6] * matrix_b[j][k+6];
                     // multiply_sum[7] += matrix_a[i][k+7] * matrix_b[j][k+7];
+
                 }
-                matrix_c[i][j] = multiply_sum[0];
-                matrix_c[i][j + 1] = multiply_sum[1];
-                matrix_c[i][j + 2] = multiply_sum[2];
-                matrix_c[i][j + 3] = multiply_sum[3];
-                matrix_c[i][j + 4] = multiply_sum[4];
-                matrix_c[i][j + 5] = multiply_sum[5];
-                matrix_c[i][j + 6] = multiply_sum[6];
-                matrix_c[i][j + 7] = multiply_sum[7];
+                matrix_c[i*n+j] = multiply_sum[0];
+                matrix_c[i*n+(j+1)] = multiply_sum[1];
+                matrix_c[i*n+(j+2)] = multiply_sum[2];
+                matrix_c[i*n+(j+3)] = multiply_sum[3];
+                matrix_c[i*n+(j+4)] = multiply_sum[4];
+                matrix_c[i*n+(j+5)] = multiply_sum[5];
+                matrix_c[i*n+(j+6)] = multiply_sum[6];
+                matrix_c[i*n+(j+7)] = multiply_sum[7];
             }
         }
     }
     StopTime();
     double exc_time = GetTime();
-    //printf("Parallel Improved Time for %d number of columns and rows = %f \n", n, GetTime());
+    // printf("Parallel Improved Time for %d number of columns and rows = %f \n", n, GetTime());    
     return exc_time;
 }
 
