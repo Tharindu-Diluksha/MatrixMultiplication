@@ -1,171 +1,234 @@
-/////////////////////10 calculations inside loop//////////////////////////
+Parallel Improved Time for 200 number of columns and rows = 0.013536 
+Parallel Improved Time for 200 number of columns and rows = 0.013907 
+Parallel Improved Time for 200 number of columns and rows = 0.019631 
+Parallel Improved Time for 200 number of columns and rows = 0.013656 
+Parallel Improved Time for 200 number of columns and rows = 0.013640 
+Parallel Improved Time for 200 number of columns and rows = 0.013616 
+Parallel Improved Time for 200 number of columns and rows = 0.013565 
+Parallel Improved Time for 200 number of columns and rows = 0.013548 
+Parallel Improved Time for 200 number of columns and rows = 0.014413 
+Parallel Improved Time for 200 number of columns and rows = 0.013606 
+No of samples runing for 200 raws matrix = 25
+Parallel Improved Time for 200 number of columns and rows = 0.013556 
+Parallel Improved Time for 200 number of columns and rows = 0.013612 
+Parallel Improved Time for 200 number of columns and rows = 0.013556 
+Parallel Improved Time for 200 number of columns and rows = 0.013553 
+Parallel Improved Time for 200 number of columns and rows = 0.013550 
+Parallel Improved Time for 200 number of columns and rows = 0.013533 
+Parallel Improved Time for 200 number of columns and rows = 0.014475 
+Parallel Improved Time for 200 number of columns and rows = 0.014279 
+Parallel Improved Time for 200 number of columns and rows = 0.013604 
+Parallel Improved Time for 200 number of columns and rows = 0.013544 
+Parallel Improved Time for 200 number of columns and rows = 0.013552 
+Parallel Improved Time for 200 number of columns and rows = 0.013625 
+Parallel Improved Time for 200 number of columns and rows = 0.013551 
+Parallel Improved Time for 200 number of columns and rows = 0.013555 
+Parallel Improved Time for 200 number of columns and rows = 0.013568 
+Parallel Improved Time for 200 number of columns and rows = 0.013548 
+Parallel Improved Time for 200 number of columns and rows = 0.014231 
+Parallel Improved Time for 200 number of columns and rows = 0.013552 
+Parallel Improved Time for 200 number of columns and rows = 0.013536 
+Parallel Improved Time for 200 number of columns and rows = 0.013581 
+Parallel Improved Time for 200 number of columns and rows = 0.013545 
+Parallel Improved Time for 200 number of columns and rows = 0.013930 
+Parallel Improved Time for 200 number of columns and rows = 0.013554 
+Parallel Improved Time for 200 number of columns and rows = 0.013593 
+Parallel Improved Time for 200 number of columns and rows = 0.013528 
+Time for serial multiplication of 200 raws matrix = 0.031012
+Time for Parallel multiplication of 200 raws matrix = 0.019119
+Time for Parallel Improved multiplication of 200 raws matrix = 0.013668
 
-Serial Time for 200 number of columns and rows = 0.043441 
-Parallel Time for 200 number of columns and rows = 0.025653 
-Parallel Improved Time for 200 number of columns and rows = 0.014727 
+Parallel Improved Time for 400 number of columns and rows = 0.111134 
+Parallel Improved Time for 400 number of columns and rows = 0.110829 
+Parallel Improved Time for 400 number of columns and rows = 0.109253 
+Parallel Improved Time for 400 number of columns and rows = 0.108826 
+Parallel Improved Time for 400 number of columns and rows = 0.109658 
+Parallel Improved Time for 400 number of columns and rows = 0.108505 
+Parallel Improved Time for 400 number of columns and rows = 0.108828 
+Parallel Improved Time for 400 number of columns and rows = 0.109875 
+Parallel Improved Time for 400 number of columns and rows = 0.108583 
+Parallel Improved Time for 400 number of columns and rows = 0.108829 
+No of samples runing for 400 raws matrix = 1
+Parallel Improved Time for 400 number of columns and rows = 0.109166 
+Time for serial multiplication of 400 raws matrix = 0.256586
+Time for Parallel multiplication of 400 raws matrix = 0.164394
+Time for Parallel Improved multiplication of 400 raws matrix = 0.109166
 
-Serial Time for 400 number of columns and rows = 0.253883 
-Parallel Time for 400 number of columns and rows = 0.169416 
-Parallel Improved Time for 400 number of columns and rows = 0.114811 
+Parallel Improved Time for 600 number of columns and rows = 0.372150 
+Parallel Improved Time for 600 number of columns and rows = 0.369267 
+Parallel Improved Time for 600 number of columns and rows = 0.374938 
+Parallel Improved Time for 600 number of columns and rows = 0.372124 
+Parallel Improved Time for 600 number of columns and rows = 0.369818 
+Parallel Improved Time for 600 number of columns and rows = 0.369547 
+Parallel Improved Time for 600 number of columns and rows = 0.376666 
+Parallel Improved Time for 600 number of columns and rows = 0.368033 
+Parallel Improved Time for 600 number of columns and rows = 0.369601 
+Parallel Improved Time for 600 number of columns and rows = 0.371479 
+No of samples runing for 600 raws matrix = 2
+Parallel Improved Time for 600 number of columns and rows = 0.373913 
+Parallel Improved Time for 600 number of columns and rows = 0.368716 
+Time for serial multiplication of 600 raws matrix = 1.001735
+Time for Parallel multiplication of 600 raws matrix = 0.875622
+Time for Parallel Improved multiplication of 600 raws matrix = 0.371314
 
-Serial Time for 600 number of columns and rows = 1.080405 
-Parallel Time for 600 number of columns and rows = 0.939666 
-Parallel Improved Time for 600 number of columns and rows = 0.385893 
+Parallel Improved Time for 800 number of columns and rows = 0.881826 
+Parallel Improved Time for 800 number of columns and rows = 0.879329 
+Parallel Improved Time for 800 number of columns and rows = 0.894261 
+Parallel Improved Time for 800 number of columns and rows = 0.932508 
+Parallel Improved Time for 800 number of columns and rows = 0.891194 
+Parallel Improved Time for 800 number of columns and rows = 0.890705 
+Parallel Improved Time for 800 number of columns and rows = 0.916733 
+Parallel Improved Time for 800 number of columns and rows = 0.881241 
+Parallel Improved Time for 800 number of columns and rows = 0.886132 
+Parallel Improved Time for 800 number of columns and rows = 0.903139 
+No of samples runing for 800 raws matrix = 9
+Parallel Improved Time for 800 number of columns and rows = 0.919281 
+Parallel Improved Time for 800 number of columns and rows = 0.986119 
+Parallel Improved Time for 800 number of columns and rows = 0.891889 
+Parallel Improved Time for 800 number of columns and rows = 0.892217 
+Parallel Improved Time for 800 number of columns and rows = 0.920768 
+Parallel Improved Time for 800 number of columns and rows = 1.071232 
+Parallel Improved Time for 800 number of columns and rows = 1.007852 
+Parallel Improved Time for 800 number of columns and rows = 0.906533 
+Parallel Improved Time for 800 number of columns and rows = 0.907054 
+Time for serial multiplication of 800 raws matrix = 4.358456
+Time for Parallel multiplication of 800 raws matrix = 2.837662
+Time for Parallel Improved multiplication of 800 raws matrix = 0.944772
 
-Serial Time for 800 number of columns and rows = 3.891354 
-Parallel Time for 800 number of columns and rows = 2.777559 
-Parallel Improved Time for 800 number of columns and rows = 0.961418 
+Parallel Improved Time for 1000 number of columns and rows = 2.020574 
+Parallel Improved Time for 1000 number of columns and rows = 1.758924 
+Parallel Improved Time for 1000 number of columns and rows = 1.838454 
+Parallel Improved Time for 1000 number of columns and rows = 1.961652 
+Parallel Improved Time for 1000 number of columns and rows = 1.822100 
+Parallel Improved Time for 1000 number of columns and rows = 1.831254 
+Parallel Improved Time for 1000 number of columns and rows = 1.974450 
+Parallel Improved Time for 1000 number of columns and rows = 2.028256 
+Parallel Improved Time for 1000 number of columns and rows = 2.124579 
+Parallel Improved Time for 1000 number of columns and rows = 1.812983 
+No of samples runing for 1000 raws matrix = 6
+Parallel Improved Time for 1000 number of columns and rows = 1.982871 
+Parallel Improved Time for 1000 number of columns and rows = 1.792872 
+Parallel Improved Time for 1000 number of columns and rows = 1.778882 
+Parallel Improved Time for 1000 number of columns and rows = 1.786416 
+Parallel Improved Time for 1000 number of columns and rows = 1.768749 
+Parallel Improved Time for 1000 number of columns and rows = 1.771372 
+Time for serial multiplication of 1000 raws matrix = 9.408286
+Time for Parallel multiplication of 1000 raws matrix = 5.641804
+Time for Parallel Improved multiplication of 1000 raws matrix = 1.813527
 
-Serial Time for 1000 number of columns and rows = 9.214028 
-Parallel Time for 1000 number of columns and rows = 5.633252 
-Parallel Improved Time for 1000 number of columns and rows = 1.848069 
+Parallel Improved Time for 1200 number of columns and rows = 3.042859 
+Parallel Improved Time for 1200 number of columns and rows = 3.063331 
+Parallel Improved Time for 1200 number of columns and rows = 3.029667 
+Parallel Improved Time for 1200 number of columns and rows = 3.041591 
+Parallel Improved Time for 1200 number of columns and rows = 3.050800 
+Parallel Improved Time for 1200 number of columns and rows = 3.036918 
+Parallel Improved Time for 1200 number of columns and rows = 3.079298 
+Parallel Improved Time for 1200 number of columns and rows = 3.083240 
+Parallel Improved Time for 1200 number of columns and rows = 3.052281 
+Parallel Improved Time for 1200 number of columns and rows = 3.039202 
+No of samples runing for 1200 raws matrix = 8
+Parallel Improved Time for 1200 number of columns and rows = 3.021652 
+Parallel Improved Time for 1200 number of columns and rows = 3.236470 
+Parallel Improved Time for 1200 number of columns and rows = 3.342139 
+Parallel Improved Time for 1200 number of columns and rows = 3.408761 
+Parallel Improved Time for 1200 number of columns and rows = 3.121226 
+Parallel Improved Time for 1200 number of columns and rows = 3.149695 
+Parallel Improved Time for 1200 number of columns and rows = 3.944434 
+Parallel Improved Time for 1200 number of columns and rows = 3.601336 
+Time for serial multiplication of 1200 raws matrix = 19.680506
+Time for Parallel multiplication of 1200 raws matrix = 10.446498
+Time for Parallel Improved multiplication of 1200 raws matrix = 3.353214
 
-Serial Time for 1200 number of columns and rows = 19.685695 
-Parallel Time for 1200 number of columns and rows = 10.037297 
-Parallel Improved Time for 1200 number of columns and rows = 3.136285 
+Parallel Improved Time for 1400 number of columns and rows = 5.075107 
+Parallel Improved Time for 1400 number of columns and rows = 5.001042 
+Parallel Improved Time for 1400 number of columns and rows = 4.968144 
+Parallel Improved Time for 1400 number of columns and rows = 5.498072 
+Parallel Improved Time for 1400 number of columns and rows = 4.900929 
+Parallel Improved Time for 1400 number of columns and rows = 4.974850 
+Parallel Improved Time for 1400 number of columns and rows = 4.982606 
+Parallel Improved Time for 1400 number of columns and rows = 4.880800 
+Parallel Improved Time for 1400 number of columns and rows = 5.008158 
+Parallel Improved Time for 1400 number of columns and rows = 4.981817 
+No of samples runing for 1400 raws matrix = 2
+Parallel Improved Time for 1400 number of columns and rows = 5.329413 
+Parallel Improved Time for 1400 number of columns and rows = 4.974694 
+Time for serial multiplication of 1400 raws matrix = 30.884657
+Time for Parallel multiplication of 1400 raws matrix = 16.555277
+Time for Parallel Improved multiplication of 1400 raws matrix = 5.152054
 
-Serial Time for 1400 number of columns and rows = 29.602139 
-Parallel Time for 1400 number of columns and rows = 15.643446 
-Parallel Improved Time for 1400 number of columns and rows = 5.064191 
+Parallel Improved Time for 1600 number of columns and rows = 7.544056 
+Parallel Improved Time for 1600 number of columns and rows = 7.687504 
+Parallel Improved Time for 1600 number of columns and rows = 9.433943 
+Parallel Improved Time for 1600 number of columns and rows = 7.464922 
+Parallel Improved Time for 1600 number of columns and rows = 7.558704 
+Parallel Improved Time for 1600 number of columns and rows = 7.631564 
+Parallel Improved Time for 1600 number of columns and rows = 8.044735 
+Parallel Improved Time for 1600 number of columns and rows = 9.537950 
+Parallel Improved Time for 1600 number of columns and rows = 8.191758 
+Parallel Improved Time for 1600 number of columns and rows = 7.461017 
+No of samples runing for 1600 raws matrix = 14
+Parallel Improved Time for 1600 number of columns and rows = 7.806752 
+Parallel Improved Time for 1600 number of columns and rows = 7.727603 
+Parallel Improved Time for 1600 number of columns and rows = 8.077533 
+Parallel Improved Time for 1600 number of columns and rows = 7.916700 
+Parallel Improved Time for 1600 number of columns and rows = 8.091722 
+Parallel Improved Time for 1600 number of columns and rows = 7.582841 
+Parallel Improved Time for 1600 number of columns and rows = 7.445785 
+Parallel Improved Time for 1600 number of columns and rows = 7.356183 
+Parallel Improved Time for 1600 number of columns and rows = 7.344446 
+Parallel Improved Time for 1600 number of columns and rows = 9.450997 
+Parallel Improved Time for 1600 number of columns and rows = 7.582991 
+Parallel Improved Time for 1600 number of columns and rows = 9.121660 
+Parallel Improved Time for 1600 number of columns and rows = 8.841779 
+Parallel Improved Time for 1600 number of columns and rows = 8.749674 
+Time for serial multiplication of 1600 raws matrix = 48.369618
+Time for Parallel multiplication of 1600 raws matrix = 26.196159
+Time for Parallel Improved multiplication of 1600 raws matrix = 8.078333
 
-Serial Time for 1600 number of columns and rows = 46.622711 
-Parallel Time for 1600 number of columns and rows = 24.042516 
-Parallel Improved Time for 1600 number of columns and rows = 7.496487 
+Parallel Improved Time for 1800 number of columns and rows = 13.421830 
+Parallel Improved Time for 1800 number of columns and rows = 10.533531 
+Parallel Improved Time for 1800 number of columns and rows = 11.089834 
+Parallel Improved Time for 1800 number of columns and rows = 12.936647 
+Parallel Improved Time for 1800 number of columns and rows = 13.004904 
+Parallel Improved Time for 1800 number of columns and rows = 10.863859 
+Parallel Improved Time for 1800 number of columns and rows = 10.376432 
+Parallel Improved Time for 1800 number of columns and rows = 12.861085 
+Parallel Improved Time for 1800 number of columns and rows = 12.706851 
+Parallel Improved Time for 1800 number of columns and rows = 12.366189 
+No of samples runing for 1800 raws matrix = 13
+Parallel Improved Time for 1800 number of columns and rows = 12.203227 
+Parallel Improved Time for 1800 number of columns and rows = 12.238532 
+Parallel Improved Time for 1800 number of columns and rows = 12.047609 
+Parallel Improved Time for 1800 number of columns and rows = 11.847587 
+Parallel Improved Time for 1800 number of columns and rows = 12.285788 
+Parallel Improved Time for 1800 number of columns and rows = 11.826843 
+Parallel Improved Time for 1800 number of columns and rows = 12.448344 
+Parallel Improved Time for 1800 number of columns and rows = 12.997212 
+Parallel Improved Time for 1800 number of columns and rows = 12.194830 
+Parallel Improved Time for 1800 number of columns and rows = 12.485423 
+Parallel Improved Time for 1800 number of columns and rows = 12.122211 
+Parallel Improved Time for 1800 number of columns and rows = 12.236462 
+Parallel Improved Time for 1800 number of columns and rows = 12.371103 
+Time for serial multiplication of 1800 raws matrix = 71.224924
+Time for Parallel multiplication of 1800 raws matrix = 42.497994
+Time for Parallel Improved multiplication of 1800 raws matrix = 12.254244
 
-Serial Time for 1800 number of columns and rows = 67.694963 
-Parallel Time for 1800 number of columns and rows = 35.619125 
-Parallel Improved Time for 1800 number of columns and rows = 10.547912 
-
-Serial Time for 2000 number of columns and rows = 98.225359 
-Parallel Time for 2000 number of columns and rows = 50.124918 
-Parallel Improved Time for 2000 number of columns and rows = 14.502339
-
-/////////////////////8 calculations inside loop//////////////////////////
-
-Serial Time for 200 number of columns and rows = 0.031119 
-Parallel Time for 200 number of columns and rows = 0.025621 
-Parallel Improved Time for 200 number of columns and rows = 0.014893 
-
-Serial Time for 400 number of columns and rows = 0.258323 
-Parallel Time for 400 number of columns and rows = 0.168008 
-Parallel Improved Time for 400 number of columns and rows = 0.114704 
-
-Serial Time for 600 number of columns and rows = 1.093404 
-Parallel Time for 600 number of columns and rows = 0.886866 
-Parallel Improved Time for 600 number of columns and rows = 0.385529 
-
-Serial Time for 800 number of columns and rows = 4.699633 
-Parallel Time for 800 number of columns and rows = 2.751694 
-Parallel Improved Time for 800 number of columns and rows = 0.935667 
-
-Serial Time for 1000 number of columns and rows = 9.652238 
-Parallel Time for 1000 number of columns and rows = 5.605882 
-Parallel Improved Time for 1000 number of columns and rows = 1.907869 
-
-Serial Time for 1200 number of columns and rows = 19.503397 
-Parallel Time for 1200 number of columns and rows = 9.939941 
-Parallel Improved Time for 1200 number of columns and rows = 3.158613 
-
-Serial Time for 1400 number of columns and rows = 30.690512 
-Parallel Time for 1400 number of columns and rows = 16.262457 
-Parallel Improved Time for 1400 number of columns and rows = 5.376773 
-
-Serial Time for 1600 number of columns and rows = 47.166534 
-Parallel Time for 1600 number of columns and rows = 23.916508 
-Parallel Improved Time for 1600 number of columns and rows = 7.398235 
-
-Serial Time for 1800 number of columns and rows = 67.411445 
-Parallel Time for 1800 number of columns and rows = 34.902134 
-Parallel Improved Time for 1800 number of columns and rows = 10.469507 
-
-Serial Time for 2000 number of columns and rows = 94.242055 
-Parallel Time for 2000 number of columns and rows = 49.722708 
-Parallel Improved Time for 2000 number of columns and rows = 14.375939
-
-/////////////////////5 calculations inside loop//////////////////////////
-
-Serial Time for 200 number of columns and rows = 0.035894 
-Parallel Time for 200 number of columns and rows = 0.021846 
-Parallel Improved Time for 200 number of columns and rows = 0.014601 
-
-Serial Time for 400 number of columns and rows = 0.259555 
-Parallel Time for 400 number of columns and rows = 0.173288 
-Parallel Improved Time for 400 number of columns and rows = 0.119183 
-
-Serial Time for 600 number of columns and rows = 1.034057 
-Parallel Time for 600 number of columns and rows = 0.885224 
-Parallel Improved Time for 600 number of columns and rows = 0.390980 
-
-Serial Time for 800 number of columns and rows = 3.925575 
-Parallel Time for 800 number of columns and rows = 2.710769 
-Parallel Improved Time for 800 number of columns and rows = 0.932509 
-
-Serial Time for 1000 number of columns and rows = 9.093701 
-Parallel Time for 1000 number of columns and rows = 5.663084 
-Parallel Improved Time for 1000 number of columns and rows = 1.826101 
-
-Serial Time for 1200 number of columns and rows = 18.542347 
-Parallel Time for 1200 number of columns and rows = 9.688420 
-Parallel Improved Time for 1200 number of columns and rows = 3.203338 
-
-Serial Time for 1400 number of columns and rows = 30.522587 
-Parallel Time for 1400 number of columns and rows = 15.763376 
-Parallel Improved Time for 1400 number of columns and rows = 5.026688 
-
-Serial Time for 1600 number of columns and rows = 47.577187 
-Parallel Time for 1600 number of columns and rows = 24.280139 
-Parallel Improved Time for 1600 number of columns and rows = 7.453293 
-
-Serial Time for 1800 number of columns and rows = 68.556493 
-Parallel Time for 1800 number of columns and rows = 35.219560 
-Parallel Improved Time for 1800 number of columns and rows = 10.727675 
-
-Serial Time for 2000 number of columns and rows = 95.268222 
-Parallel Time for 2000 number of columns and rows = 49.926351 
-Parallel Improved Time for 2000 number of columns and rows = 14.726603 
-
-/////////////////////////transpose matrix///////////////////////////////
-
-Serial Time for 200 number of columns and rows = 0.031043 
-Parallel Time for 200 number of columns and rows = 0.027085 
-Parallel Improved Time for 200 number of columns and rows = 0.017384 
-
-Serial Time for 400 number of columns and rows = 0.282924 
-Parallel Time for 400 number of columns and rows = 0.169164 
-Parallel Improved Time for 400 number of columns and rows = 0.140873 
-
-Serial Time for 600 number of columns and rows = 1.007434 
-Parallel Time for 600 number of columns and rows = 0.879885 
-Parallel Improved Time for 600 number of columns and rows = 0.467020 
-
-Serial Time for 800 number of columns and rows = 4.525781 
-Parallel Time for 800 number of columns and rows = 2.755121 
-Parallel Improved Time for 800 number of columns and rows = 1.134983 
-
-Serial Time for 1000 number of columns and rows = 11.090163 
-Parallel Time for 1000 number of columns and rows = 5.646963 
-Parallel Improved Time for 1000 number of columns and rows = 2.169205 
-
-Serial Time for 1200 number of columns and rows = 19.485354 
-Parallel Time for 1200 number of columns and rows = 9.871880 
-Parallel Improved Time for 1200 number of columns and rows = 3.743426 
-
-Serial Time for 1400 number of columns and rows = 30.710137 
-Parallel Time for 1400 number of columns and rows = 15.845758 
-Parallel Improved Time for 1400 number of columns and rows = 5.988038 
-
-Serial Time for 1600 number of columns and rows = 46.610238 
-Parallel Time for 1600 number of columns and rows = 24.161599 
-Parallel Improved Time for 1600 number of columns and rows = 9.038771 
-
-Serial Time for 1800 number of columns and rows = 67.220105 
-Parallel Time for 1800 number of columns and rows = 35.150871 
-Parallel Improved Time for 1800 number of columns and rows = 12.785121 
-
-Serial Time for 2000 number of columns and rows = 95.150406 
-Parallel Time for 2000 number of columns and rows = 49.979004 
-Parallel Improved Time for 2000 number of columns and rows = 17.522324 
-Parallel Improved Time for 2000 number of columns and rows = 17.522324
-Parallel Improved Time for 2000 number of columns and rows = 92.682851 
-
+Parallel Improved Time for 2000 number of columns and rows = 16.839139 
+Parallel Improved Time for 2000 number of columns and rows = 17.363878 
+Parallel Improved Time for 2000 number of columns and rows = 16.421657 
+Parallel Improved Time for 2000 number of columns and rows = 16.879500 
+Parallel Improved Time for 2000 number of columns and rows = 16.565357 
+Parallel Improved Time for 2000 number of columns and rows = 16.771483 
+Parallel Improved Time for 2000 number of columns and rows = 16.652339 
+Parallel Improved Time for 2000 number of columns and rows = 17.112197 
+Parallel Improved Time for 2000 number of columns and rows = 17.333898 
+Parallel Improved Time for 2000 number of columns and rows = 16.861571 
+No of samples runing for 2000 raws matrix = 4
+Parallel Improved Time for 2000 number of columns and rows = 17.573957 
+Parallel Improved Time for 2000 number of columns and rows = 17.367216 
+Parallel Improved Time for 2000 number of columns and rows = 16.926350 
+Parallel Improved Time for 2000 number of columns and rows = 17.080155 
+Time for serial multiplication of 2000 raws matrix = 99.047310
+Time for Parallel multiplication of 2000 raws matrix = 61.179062
+Time for Parallel Improved multiplication of 2000 raws matrix = 17.236920
 
