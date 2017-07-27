@@ -10,7 +10,8 @@ struct timeval time_for_srand;
 struct timespec begin, end;
 double elapsed;
 
-void initialize_run(int n, double *serial_time, double *parallel_time, double *paralel_improved_time);
+void run_program(int number_of_raws, double *finalized_serial_time, double *finalized_parallel_time, double *finalized_paralel_improved_time, int *number_of_samples, bool is_counting_no_of_samples);
+void initiate_run(int n, double *serial_time, double *parallel_time, double *paralel_improved_time);
 void CreateFullMatrix(double **matrix, int n);
 void FillMatrix(double **matrix, int n);
 void TransposeMatrix(double **matrix, int n);
@@ -34,35 +35,77 @@ int GetSampleSize(double *array, int n);
 main(int argc, char *argv[])
 {
     int intial_number_of_samples = 10;
+    double finalized_serial_time = 0.0;
+    double finalized_parallel_time = 0.0;
+    double finalized_paralel_improved_time = 0.0;
+    int runing_number_of_samples = intial_number_of_samples;
 
     for (int number_of_raws = 200; number_of_raws <= 200; number_of_raws += 200)
     { // call through this loop for each test case
         //std::cout << i << "\n";
-        double *serial_time_array = new double[intial_number_of_samples];
-        double *parallel_time_array = new double[intial_number_of_samples];
-        double *paralel_improved_time_array = new double[intial_number_of_samples];
-        srand((time_for_srand.tv_sec * 1000) + (time_for_srand.tv_usec / 1000));
-        for (int sample_num = 0; sample_num < intial_number_of_samples; sample_num++)
-        {
-            double serial_time = 0.0;
-            double parallel_time = 0.0;
-            double paralel_improved_time = 0.0;
-            initialize_run(number_of_raws, &serial_time, &parallel_time, &paralel_improved_time);
-            serial_time_array[sample_num] = serial_time;
-            parallel_time_array[sample_num] = parallel_time;
-            paralel_improved_time_array[sample_num] = paralel_improved_time;
-        }
-
+        int runing_number_of_samples = intial_number_of_samples;
+        run_program(number_of_raws, &finalized_serial_time, &finalized_parallel_time, &finalized_paralel_improved_time, &runing_number_of_samples, true);
+        printf("No of samples runing for %d raws matrix = %d\n", number_of_raws, runing_number_of_samples);
+        run_program(number_of_raws, &finalized_serial_time, &finalized_parallel_time, &finalized_paralel_improved_time, &runing_number_of_samples, false);
+        printf("Time for serial multiplication of %d raws matrix = %f\n", number_of_raws, finalized_serial_time);
+        printf("Time for Parallel multiplication of %d raws matrix = %f\n", number_of_raws, finalized_parallel_time);
+        printf("Time for Parallel Improved multiplication of %d raws matrix = %f\n", number_of_raws, finalized_paralel_improved_time);
         std::cout << "\n";
-        
-        std::cout << GetSampleSize(serial_time_array, intial_number_of_samples) << "\n";
-        std::cout << GetSampleSize(parallel_time_array, intial_number_of_samples) << "\n";
-        std::cout << GetSampleSize(paralel_improved_time_array, intial_number_of_samples) << "\n";
     }
 }
 
-void initialize_run(int n, double *serial_time, double *parallel_time, double *paralel_improved_time)
+void run_program(int number_of_raws, double *finalized_serial_time, double *finalized_parallel_time, double *finalized_paralel_improved_time, int *number_of_samples, bool is_counting_no_of_samples)
 {
+    double *serial_time_array = new double[*number_of_samples];           //time array of serial multiplication
+    double *parallel_time_array = new double[*number_of_samples];         //time array of parallel multiplication
+    double *paralel_improved_time_array = new double[*number_of_samples]; //time array of parallel improved multiplication
+    srand((time_for_srand.tv_sec * 1000) + (time_for_srand.tv_usec / 1000));
+    int sample_size = *number_of_samples;
+    printf("run program sample_size %d = %d\n", sample_size, *number_of_samples);
+    for (int sample_num = 0; sample_num < *number_of_samples; sample_num++)
+    { // run program for given number of samples
+        double serial_time = 0.0;
+        double parallel_time = 0.0;
+        double paralel_improved_time = 0.0;
+        initiate_run(number_of_raws, &serial_time, &parallel_time, &paralel_improved_time); //initiate actual multiplication
+        serial_time_array[sample_num] = serial_time;
+        parallel_time_array[sample_num] = parallel_time;
+        paralel_improved_time_array[sample_num] = paralel_improved_time;
+    }
+
+    if (is_counting_no_of_samples)
+    { // Find the sufficient number of samples
+        int serial_sample = GetSampleSize(serial_time_array, sample_size);
+        int parallel_sample = GetSampleSize(parallel_time_array, sample_size);
+        int parallel_improved_sample = GetSampleSize(paralel_improved_time_array, sample_size);
+        std::cout << serial_sample << "\n";
+        std::cout << parallel_sample << "\n";
+        std::cout << parallel_improved_sample << "\n";
+        int max = serial_sample;
+        if (max < parallel_sample)
+        {
+            max = parallel_sample;
+        }
+        else if (max < parallel_improved_sample)
+        {
+            max = parallel_improved_sample;
+        }
+        *number_of_samples = max;
+    }
+
+    else
+    { // To run the multiplication without finding the no of sufficient samples
+        *finalized_serial_time = GetMean(serial_time_array, sample_size);
+        *finalized_parallel_time = GetMean(parallel_time_array, sample_size);
+        *finalized_paralel_improved_time = GetMean(paralel_improved_time_array, sample_size);
+    }
+    delete[] serial_time_array;
+    delete[] parallel_time_array;
+    delete[] paralel_improved_time_array;
+}
+
+void initiate_run(int n, double *serial_time, double *parallel_time, double *paralel_improved_time)
+{ //actually run the matrix multiplication
     double **matrix_a = new double *[n];
     double **matrix_b = new double *[n];
     double **matrix_c = new double *[n];
@@ -100,6 +143,12 @@ double GetMean(double *array, int n)
     {
         total = total + array[i];
     }
+    for (int i = 0; i < n; i++)
+    {
+        std::cout << "Get mean "<< array[i] << "\n";
+    }
+    std::cout << "Get mean === mean"<<total / (n * 1.0)<< "\n";
+    std::cout <<  "\n";
     return total / (n * 1.0);
 }
 
@@ -116,6 +165,11 @@ double GetSD(double *array, double mean, int n)
 int GetSampleSize(double *array, int n)
 {
     double mean = GetMean(array, n);
+    for (int i = 0; i < n; i++)
+    {
+        std::cout << "Sample count "<< array[i] << "\n";
+    }
+    std::cout <<  "\n";
     return pow(((100 * 1.960 * GetSD(array, mean, n)) / (5 * mean)), 2) + 1;
 }
 
